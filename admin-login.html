@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | PremiumShop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --dark-bg: #121212;
+            --card-bg: #1e1e1e;
+            --light-text: #ffffff;
+            --accent-color: #667eea;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--light-text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(245, 87, 108, 0.15) 0%, transparent 50%);
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 480px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 36px;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .logo i {
+            font-size: 40px;
+        }
+
+        .login-header h2 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .login-header p {
+            color: #b0b0b0;
+            font-size: 16px;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 50px 40px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: #d1d1d1;
+            font-size: 15px;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            font-size: 18px;
+            z-index: 1;
+        }
+
+        .input-with-icon input {
+            width: 100%;
+            padding: 18px 20px 18px 55px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .input-with-icon input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .input-with-icon input::placeholder {
+            color: #888;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .back-to-store {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .back-to-store a {
+            color: #b0b0b0;
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-to-store a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Loading animation */
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .login-card {
+                padding: 40px 30px;
+            }
+            
+            .logo {
+                font-size: 30px;
+            }
+            
+            .logo i {
+                font-size: 34px;
+            }
+            
+            .login-header h2 {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-height: 700px) {
+            body {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <div class="logo">
+                <i class="fas fa-crown"></i>
+                PremiumShop
+            </div>
+            <h2>Admin Portal</h2>
+            <p>Access your store management dashboard</p>
+        </div>
+        
+        <div class="login-card">
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" name="username" placeholder="Enter admin username" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" placeholder="Enter admin password" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="login-btn" id="loginButton">
+                    <span id="buttonText">Login to Dashboard</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+            
+            <div class="back-to-store">
+                <a href="index.html">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Store
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // YOUR SCRIPT URL
+        const API_URL = "https://script.google.com/macros/s/AKfycbwx6rR0strzF1Y52uzRNajitbgNWHiPZ5hjt1QP7fKP41MbqXWxY5UftDKUs7a8LEI1/exec";
+        
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const loginButton = document.getElementById('loginButton');
+            const buttonText = document.getElementById('buttonText');
+            
+            // Validate inputs
+            if (!username || !password) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Missing Information',
+                    text: 'Please enter both username and password',
+                    background: '#1e1e1e',
+                    color: 'white',
+                    confirmButtonColor: '#667eea'
+                });
+                return;
+            }
+            
+            // Show loading state
+            loginButton.disabled = true;
+            buttonText.innerHTML = 'Authenticating...';
+            loginButton.innerHTML = '<div class="loader"></div>';
+            
+            try {
+                // Add timestamp to prevent caching
+                const timestamp = new Date().getTime();
+                const response = await fetch(`${API_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&_=${timestamp}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const text = await response.text();
+                let data;
+                
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    throw new Error("Invalid JSON response from server");
+                }
+                
+                if (data.status === "success") {
+                    // Show success message
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Login Successful!',
+                        text: 'Redirecting to admin dashboard...',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        background: '#1e1e1e',
+                        color: 'white'
+                    });
+                    
+                    // Store authentication
+                    localStorage.setItem('adminAuth', 'true');
+                    localStorage.setItem('adminUsername', username);
+                    
+                    // Redirect to dashboard
+                    window.location.href = "dashboard.html";
+                } else {
+                    // Show error message
+                    await Swal.fire({
+                        icon: 'error',
+                        title: 'Login Failed',
+                        text: data.message || 'Invalid credentials',
+                        background: '#1e1e1e',
+                        color: 'white',
+                        confirmButtonColor: '#667eea'
+                    });
+                    
+                    // Reset button
+                    loginButton.disabled = false;
+                    buttonText.innerHTML = 'Login to Dashboard';
+                    loginButton.innerHTML = '<span id="buttonText">Login to Dashboard</span><i class="fas fa-arrow-right"></i>';
+                }
+            } catch (error) {
+                console.error("Login error:", error);
+                
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Connection Error',
+                    text: 'Unable to connect to server. Please try again.',
+                    background: '#1e1e1e',
+                    color: 'white',
+                    confirmButtonColor: '#667eea'
+                });
+                
+                // Reset button
+                loginButton.disabled = false;
+                buttonText.innerHTML = 'Login to Dashboard';
+                loginButton.innerHTML = '<span id="buttonText">Login to Dashboard</span><i class="fas fa-arrow-right"></i>';
+            }
+        });
+        
+        // Check if already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const isAuthenticated = localStorage.getItem('adminAuth');
+            if (isAuthenticated) {
+                window.location.href = "dashboard.html";
+            }
+        });
+    </script>
+</body>
+</html>
