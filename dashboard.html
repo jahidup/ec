@@ -3,23 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | PremiumShop</title>
+    <title>Admin Login | PremiumShop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --dark-bg: #0a0a0a;
-            --sidebar-bg: #121212;
+            --dark-bg: #121212;
             --card-bg: #1e1e1e;
             --light-text: #ffffff;
             --accent-color: #667eea;
             --success-color: #10b981;
             --error-color: #ef4444;
-            --warning-color: #f59e0b;
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            --radius: 12px;
+            --radius: 16px;
         }
 
         * {
@@ -33,247 +31,66 @@
             background: var(--dark-bg);
             color: var(--light-text);
             min-height: 100vh;
-            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(245, 87, 108, 0.15) 0%, transparent 50%);
         }
 
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100vh;
-            width: 260px;
-            background: var(--sidebar-bg);
-            padding: 25px 20px;
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            flex-direction: column;
-            z-index: 100;
+        .login-container {
+            width: 100%;
+            max-width: 480px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
         }
 
         .logo {
-            font-size: 26px;
+            font-size: 36px;
             font-weight: 800;
             background: var(--primary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 10px;
         }
 
         .logo i {
-            font-size: 30px;
+            font-size: 40px;
         }
 
-        .admin-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 40px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--radius);
-        }
-
-        .admin-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--primary-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            font-weight: bold;
-        }
-
-        .admin-details h3 {
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-
-        .admin-details p {
-            font-size: 13px;
-            color: #b0b0b0;
-        }
-
-        .nav-menu {
-            flex-grow: 1;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            color: #b0b0b0;
-            text-decoration: none;
-            border-radius: var(--radius);
+        .login-header h2 {
+            font-size: 28px;
+            font-weight: 600;
             margin-bottom: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-item:hover {
-            background: rgba(102, 126, 234, 0.1);
             color: white;
         }
 
-        .nav-item.active {
-            background: var(--primary-gradient);
-            color: white;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .nav-item i {
-            font-size: 18px;
-            width: 24px;
-            text-align: center;
-        }
-
-        .logout-btn {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            color: #ef4444;
-            text-decoration: none;
-            border-radius: var(--radius);
-            margin-top: auto;
-            transition: all 0.3s ease;
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        .logout-btn:hover {
-            background: rgba(239, 68, 68, 0.2);
-        }
-
-        /* Main Content */
-        .main-content {
-            margin-left: 260px;
-            padding: 30px;
-            min-height: 100vh;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .header h1 {
-            font-size: 32px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #ffffff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .stats-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 25px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
-
-        .stat-card:nth-child(1) .stat-icon {
-            background: linear-gradient(135deg, #667eea 0%, rgba(102, 126, 234, 0.2) 100%);
-            color: #667eea;
-        }
-
-        .stat-card:nth-child(2) .stat-icon {
-            background: linear-gradient(135deg, #10b981 0%, rgba(16, 185, 129, 0.2) 100%);
-            color: #10b981;
-        }
-
-        .stat-card:nth-child(3) .stat-icon {
-            background: linear-gradient(135deg, #f59e0b 0%, rgba(245, 158, 11, 0.2) 100%);
-            color: #f59e0b;
-        }
-
-        .stat-info h3 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .stat-info p {
+        .login-header p {
             color: #b0b0b0;
-            font-size: 14px;
+            font-size: 16px;
         }
 
-        /* Update Price Form */
-        .dashboard-section {
+        .login-card {
             background: var(--card-bg);
             border-radius: var(--radius);
-            padding: 35px;
+            padding: 50px 40px;
             box-shadow: var(--shadow);
-            margin-bottom: 40px;
-            animation: fadeIn 0.6s ease;
-        }
-
-        .section-title {
-            font-size: 22px;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .section-title i {
-            color: var(--accent-color);
-        }
-
-        .update-form {
-            max-width: 600px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-
-        @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            position: relative;
         }
 
         .form-group label {
@@ -281,98 +98,94 @@
             margin-bottom: 10px;
             font-weight: 500;
             color: #d1d1d1;
+            font-size: 15px;
         }
 
-        .form-control {
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            font-size: 18px;
+            z-index: 1;
+        }
+
+        .input-with-icon input {
             width: 100%;
-            padding: 16px 20px;
+            padding: 18px 20px 18px 55px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius);
+            border-radius: 12px;
             color: white;
             font-size: 16px;
             transition: all 0.3s ease;
         }
 
-        .form-control:focus {
+        .input-with-icon input:focus {
             outline: none;
             border-color: var(--accent-color);
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            background: rgba(255, 255, 255, 0.08);
         }
 
-        .update-btn {
+        .input-with-icon input::placeholder {
+            color: #888;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 18px;
             background: var(--primary-gradient);
             color: white;
             border: none;
-            padding: 16px 40px;
-            border-radius: var(--radius);
+            border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin-top: 10px;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
-            margin-top: 20px;
         }
 
-        .update-btn:hover {
+        .login-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
 
-        .update-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
+        .login-btn:active {
+            transform: translateY(-1px);
         }
 
-        /* Products Table */
-        .products-table-container {
-            overflow-x: auto;
-            border-radius: var(--radius);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .back-to-store {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .products-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .products-table th {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 18px 20px;
-            text-align: left;
-            font-weight: 600;
+        .back-to-store a {
             color: #b0b0b0;
-            font-size: 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .products-table td {
-            padding: 18px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .products-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .products-table tr:hover {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .product-id {
-            font-weight: 600;
+        .back-to-store a:hover {
             color: var(--accent-color);
         }
 
-        .product-price {
-            font-weight: 700;
-            color: #10b981;
-        }
-
-        /* Loading Animation */
+        /* Loading animation */
         .loader {
             display: inline-block;
             width: 20px;
@@ -385,7 +198,7 @@
 
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -394,235 +207,71 @@
         }
 
         /* Responsive */
-        @media (max-width: 992px) {
-            .sidebar {
-                width: 80px;
-                padding: 25px 15px;
-            }
-            
-            .logo span, .admin-details, .nav-item span, .logout-btn span {
-                display: none;
+        @media (max-width: 576px) {
+            .login-card {
+                padding: 40px 30px;
             }
             
             .logo {
-                justify-content: center;
+                font-size: 30px;
             }
             
-            .admin-info {
-                justify-content: center;
+            .logo i {
+                font-size: 34px;
             }
             
-            .nav-item, .logout-btn {
-                justify-content: center;
-            }
-            
-            .main-content {
-                margin-left: 80px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                padding: 20px;
-            }
-            
-            .header h1 {
+            .login-header h2 {
                 font-size: 24px;
             }
-            
-            .dashboard-section {
-                padding: 25px;
-            }
         }
 
-        @media (max-width: 576px) {
-            .sidebar {
-                position: static;
-                width: 100%;
-                height: auto;
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: space-between;
-                padding: 15px;
-            }
-            
-            .logo {
-                margin-bottom: 0;
-                border-bottom: none;
-                order: 1;
-                width: 100%;
-                justify-content: center;
-                margin-bottom: 15px;
-            }
-            
-            .admin-info {
-                display: none;
-            }
-            
-            .nav-menu {
-                order: 2;
-                display: flex;
-                flex-grow: 0;
-                width: 100%;
-                justify-content: center;
-                gap: 10px;
-            }
-            
-            .nav-item {
-                margin-bottom: 0;
-                padding: 12px;
-            }
-            
-            .logout-btn {
-                order: 3;
-                margin-top: 0;
-                padding: 12px;
-            }
-            
-            .main-content {
-                margin-left: 0;
+        @media (max-height: 700px) {
+            body {
+                padding: 40px 20px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="logo">
-            <i class="fas fa-crown"></i>
-            <span>PremiumShop</span>
+    <div class="login-container">
+        <div class="login-header">
+            <div class="logo">
+                <i class="fas fa-crown"></i>
+                PremiumShop
+            </div>
+            <h2>Admin Portal</h2>
+            <p>Access your store management dashboard</p>
         </div>
         
-        <div class="admin-info">
-            <div class="admin-avatar" id="adminAvatar">A</div>
-            <div class="admin-details">
-                <h3 id="adminName">Admin</h3>
-                <p>Store Manager</p>
-            </div>
-        </div>
-        
-        <div class="nav-menu">
-            <a href="#" class="nav-item active">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>Dashboard</span>
-            </a>
-            <a href="index.html" class="nav-item">
-                <i class="fas fa-store"></i>
-                <span>View Store</span>
-            </a>
-            <a href="#" class="nav-item">
-                <i class="fas fa-box"></i>
-                <span>Products</span>
-            </a>
-            <a href="#" class="nav-item">
-                <i class="fas fa-shopping-cart"></i>
-                <span>Orders</span>
-            </a>
-        </div>
-        
-        <a href="#" class="logout-btn" id="logoutBtn">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
-        </a>
-    </div>
-    
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="header">
-            <h1>Admin Dashboard</h1>
-            <div style="color: #b0b0b0; font-size: 14px;">
-                <i class="fas fa-calendar"></i>
-                <span id="currentDate"></span>
-            </div>
-        </div>
-        
-        <!-- Stats Cards -->
-        <div class="stats-cards">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-box"></i>
-                </div>
-                <div class="stat-info">
-                    <h3 id="totalProducts">0</h3>
-                    <p>Total Products</p>
-                </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-rupee-sign"></i>
-                </div>
-                <div class="stat-info">
-                    <h3 id="avgPrice">₹0</h3>
-                    <p>Average Price</p>
-                </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-sync"></i>
-                </div>
-                <div class="stat-info">
-                    <h3 id="lastUpdated">0</h3>
-                    <p>Updated Today</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Update Price Form -->
-        <div class="dashboard-section">
-            <h2 class="section-title">
-                <i class="fas fa-edit"></i>
-                Update Product Price
-            </h2>
-            
-            <div class="update-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="productId">Product ID</label>
-                        <input type="text" id="productId" class="form-control" placeholder="Enter product ID" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="newPrice">New Price (₹)</label>
-                        <input type="number" id="newPrice" class="form-control" placeholder="Enter new price" min="1" required>
+        <div class="login-card">
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" name="username" placeholder="Enter admin username" required>
                     </div>
                 </div>
                 
-                <button type="button" class="update-btn" id="updatePriceBtn">
-                    <span id="updateButtonText">Update Price</span>
-                    <i class="fas fa-check"></i>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" placeholder="Enter admin password" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="login-btn" id="loginButton">
+                    <span id="buttonText">Login to Dashboard</span>
+                    <i class="fas fa-arrow-right"></i>
                 </button>
-            </div>
-        </div>
-        
-        <!-- Products Table -->
-        <div class="dashboard-section">
-            <h2 class="section-title">
-                <i class="fas fa-list"></i>
-                All Products
-            </h2>
+            </form>
             
-            <div class="products-table-container">
-                <table class="products-table" id="productsTable">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Product Name</th>
-                            <th>Current Price</th>
-                            <th>Image</th>
-                        </tr>
-                    </thead>
-                    <tbody id="productsTableBody">
-                        <!-- Products will be loaded here -->
-                        <tr>
-                            <td colspan="4" style="text-align: center; padding: 40px;">
-                                <div class="loader" style="margin: 0 auto 15px;"></div>
-                                <p>Loading products...</p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="back-to-store">
+                <a href="index.html">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Store
+                </a>
             </div>
         </div>
     </div>
@@ -631,163 +280,21 @@
         // YOUR SCRIPT URL
         const API_URL = "https://script.google.com/macros/s/AKfycbwx6rR0strzF1Y52uzRNajitbgNWHiPZ5hjt1QP7fKP41MbqXWxY5UftDKUs7a8LEI1/exec";
         
-        // Check if user is authenticated
-        document.addEventListener('DOMContentLoaded', function() {
-            const isAuthenticated = localStorage.getItem('adminAuth');
-            const adminUsername = localStorage.getItem('adminUsername');
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
             
-            if (!isAuthenticated || !adminUsername) {
-                window.location.href = "admin-login.html";
-                return;
-            }
-            
-            // Set admin name and avatar
-            document.getElementById('adminName').textContent = adminUsername;
-            document.getElementById('adminAvatar').textContent = adminUsername.charAt(0).toUpperCase();
-            
-            // Set current date
-            const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
-            
-            // Load products
-            fetchProducts();
-            
-            // Set up logout button
-            document.getElementById('logoutBtn').addEventListener('click', function(e) {
-                e.preventDefault();
-                Swal.fire({
-                    title: 'Logout?',
-                    text: 'Are you sure you want to logout?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#667eea',
-                    cancelButtonColor: '#ef4444',
-                    confirmButtonText: 'Yes, logout',
-                    background: '#1e1e1e',
-                    color: 'white'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        localStorage.removeItem('adminAuth');
-                        localStorage.removeItem('adminUsername');
-                        window.location.href = "admin-login.html";
-                    }
-                });
-            });
-            
-            // Set up update price button
-            document.getElementById('updatePriceBtn').addEventListener('click', updateProductPrice);
-            
-            // Allow Enter key to submit form
-            document.getElementById('newPrice').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    updateProductPrice();
-                }
-            });
-        });
-        
-        async function fetchProducts() {
-            try {
-                const timestamp = new Date().getTime();
-                const response = await fetch(`${API_URL}?action=getProducts&_=${timestamp}`);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const text = await response.text();
-                let data;
-                
-                try {
-                    data = JSON.parse(text);
-                } catch (e) {
-                    throw new Error("Invalid JSON response from server");
-                }
-                
-                if (data.status === "success") {
-                    displayProductsTable(data.products);
-                    updateStats(data.products);
-                } else {
-                    showError("Failed to load products.");
-                }
-            } catch (error) {
-                console.error("Error fetching products:", error);
-                showError("Network error. Please check your connection.");
-            }
-        }
-        
-        function displayProductsTable(products) {
-            const tableBody = document.getElementById('productsTableBody');
-            tableBody.innerHTML = '';
-            
-            if (!products || products.length === 0) {
-                tableBody.innerHTML = `
-                    <tr>
-                        <td colspan="4" style="text-align: center; padding: 40px; color: #b0b0b0;">
-                            <i class="fas fa-box-open" style="font-size: 40px; margin-bottom: 15px; opacity: 0.5;"></i>
-                            <p>No products found</p>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-            
-            products.forEach(product => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="product-id">${product.id}</td>
-                    <td>${product.name}</td>
-                    <td class="product-price">₹${product.price.toLocaleString('en-IN')}</td>
-                    <td>
-                        <img src="${product.image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80'}" 
-                             alt="${product.name}" 
-                             style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;"
-                             onerror="this.src='https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80'">
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
-        
-        function updateStats(products) {
-            // Update total products
-            document.getElementById('totalProducts').textContent = products.length;
-            
-            // Calculate average price
-            if (products.length > 0) {
-                const total = products.reduce((sum, product) => sum + parseFloat(product.price), 0);
-                const avg = total / products.length;
-                document.getElementById('avgPrice').textContent = `₹${avg.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            }
-            
-            // For demo, set random updated count
-            document.getElementById('lastUpdated').textContent = Math.floor(Math.random() * 10);
-        }
-        
-        async function updateProductPrice() {
-            const productId = document.getElementById('productId').value.trim();
-            const newPrice = document.getElementById('newPrice').value.trim();
-            const updateButton = document.getElementById('updatePriceBtn');
-            const buttonText = document.getElementById('updateButtonText');
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const loginButton = document.getElementById('loginButton');
+            const buttonText = document.getElementById('buttonText');
             
             // Validate inputs
-            if (!productId || !newPrice) {
+            if (!username || !password) {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Missing Information',
-                    text: 'Please fill in both Product ID and New Price.',
-                    background: '#1e1e1e',
-                    color: 'white',
-                    confirmButtonColor: '#667eea'
-                });
-                return;
-            }
-            
-            if (isNaN(newPrice) || parseFloat(newPrice) <= 0) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Invalid Price',
-                    text: 'Please enter a valid price greater than 0.',
+                    text: 'Please enter both username and password',
                     background: '#1e1e1e',
                     color: 'white',
                     confirmButtonColor: '#667eea'
@@ -796,13 +303,14 @@
             }
             
             // Show loading state
-            updateButton.disabled = true;
-            buttonText.innerHTML = 'Updating...';
-            updateButton.innerHTML = '<div class="loader"></div>';
+            loginButton.disabled = true;
+            buttonText.innerHTML = 'Authenticating...';
+            loginButton.innerHTML = '<div class="loader"></div>';
             
             try {
+                // Add timestamp to prevent caching
                 const timestamp = new Date().getTime();
-                const response = await fetch(`${API_URL}?action=updatePrice&id=${encodeURIComponent(productId)}&newPrice=${encodeURIComponent(newPrice)}&_=${timestamp}`);
+                const response = await fetch(`${API_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&_=${timestamp}`);
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -821,32 +329,38 @@
                     // Show success message
                     await Swal.fire({
                         icon: 'success',
-                        title: 'Price Updated!',
-                        text: data.message || `Product ${productId} price updated to ₹${newPrice}`,
+                        title: 'Login Successful!',
+                        text: 'Redirecting to admin dashboard...',
+                        timer: 2000,
+                        showConfirmButton: false,
                         background: '#1e1e1e',
-                        color: 'white',
-                        confirmButtonColor: '#10b981'
+                        color: 'white'
                     });
                     
-                    // Clear form
-                    document.getElementById('productId').value = '';
-                    document.getElementById('newPrice').value = '';
+                    // Store authentication
+                    localStorage.setItem('adminAuth', 'true');
+                    localStorage.setItem('adminUsername', username);
                     
-                    // Refresh products
-                    fetchProducts();
+                    // Redirect to dashboard
+                    window.location.href = "dashboard.html";
                 } else {
                     // Show error message
                     await Swal.fire({
                         icon: 'error',
-                        title: 'Update Failed',
-                        text: data.message || 'Failed to update product price.',
+                        title: 'Login Failed',
+                        text: data.message || 'Invalid credentials',
                         background: '#1e1e1e',
                         color: 'white',
                         confirmButtonColor: '#667eea'
                     });
+                    
+                    // Reset button
+                    loginButton.disabled = false;
+                    buttonText.innerHTML = 'Login to Dashboard';
+                    loginButton.innerHTML = '<span id="buttonText">Login to Dashboard</span><i class="fas fa-arrow-right"></i>';
                 }
             } catch (error) {
-                console.error("Update error:", error);
+                console.error("Login error:", error);
                 
                 await Swal.fire({
                     icon: 'error',
@@ -856,28 +370,21 @@
                     color: 'white',
                     confirmButtonColor: '#667eea'
                 });
-            } finally {
+                
                 // Reset button
-                updateButton.disabled = false;
-                buttonText.innerHTML = 'Update Price';
-                updateButton.innerHTML = '<span id="updateButtonText">Update Price</span><i class="fas fa-check"></i>';
+                loginButton.disabled = false;
+                buttonText.innerHTML = 'Login to Dashboard';
+                loginButton.innerHTML = '<span id="buttonText">Login to Dashboard</span><i class="fas fa-arrow-right"></i>';
             }
-        }
+        });
         
-        function showError(message) {
-            const tableBody = document.getElementById('productsTableBody');
-            tableBody.innerHTML = `
-                <tr>
-                    <td colspan="4" style="text-align: center; padding: 40px; color: #ef4444;">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 40px; margin-bottom: 15px;"></i>
-                        <p>${message}</p>
-                        <button onclick="fetchProducts()" style="margin-top: 15px; padding: 10px 25px; background: var(--primary-gradient); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
-                            Retry
-                        </button>
-                    </td>
-                </tr>
-            `;
-        }
+        // Check if already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const isAuthenticated = localStorage.getItem('adminAuth');
+            if (isAuthenticated) {
+                window.location.href = "dashboard.html";
+            }
+        });
     </script>
 </body>
 </html>
